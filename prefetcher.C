@@ -1,15 +1,21 @@
 #include "prefetcher.h"
 #include "mem-sim.h"
 
-bool Prefetcher::hasRequest(u_int32_t cycle) {
-	return false;
-}
+Prefetcher::Prefetcher() { isReady = false; }
+
+bool Prefetcher::hasRequest(u_int32_t cycle) { return isReady; }
 
 Request Prefetcher::getRequest(u_int32_t cycle) {
 	Request req;
+	req.addr = nextReqAddr;
 	return req;
 }
 
-void Prefetcher::completeRequest(u_int32_t cycle) { return; }
+void Prefetcher::completeRequest(u_int32_t cycle) { isReady = false; }
 
-void Prefetcher::cpuRequest(Request req) { return; }
+void Prefetcher::cpuRequest(Request req) {
+	if (!isReady && !req.HitL1) {
+		nextReqAddr = req.addr + 16;
+		isReady = true;
+	}
+}

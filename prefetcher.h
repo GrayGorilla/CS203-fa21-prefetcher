@@ -6,7 +6,13 @@
 struct Request;
 
 class Prefetcher {
+	private:
+	bool isReady;
+	u_int32_t nextReqAddr;
+
   public:
+	Prefetcher();
+
 	// should return true if a request is ready for this cycle
 	bool hasRequest(u_int32_t cycle);
 

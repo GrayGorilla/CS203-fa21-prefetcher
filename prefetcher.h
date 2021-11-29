@@ -2,17 +2,9 @@
 #define PREFETCHER_H
 
 #include <sys/types.h>
-#include <map>
-
-enum State { INITIAL, TRANSIENT, STEADY, NO_PRED };
+#include <unordered_set>
 
 struct Request;
-
-struct rptEntry {
-	u_int32_t prevAddr;
-	u_int32_t stride;
-	State state;
-};
 
 class Prefetcher {
 	private:
@@ -20,7 +12,7 @@ class Prefetcher {
 	// static const u_int32_t MASK_B = 0b11111111111111111000000000000000;
 	bool isReady;
 	u_int32_t nextReqAddr;
-	std::map<u_int32_t, rptEntry> rpt;
+	std::unordered_set<u_int32_t> tags;
 
   public:
 	Prefetcher();

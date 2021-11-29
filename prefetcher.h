@@ -2,13 +2,25 @@
 #define PREFETCHER_H
 
 #include <sys/types.h>
+#include <map>
+
+enum State { INITIAL, TRANSIENT, STEADY, NO_PRED };
 
 struct Request;
 
+struct rptEntry {
+	u_int32_t prevAddr;
+	u_int32_t stride;
+	State state;
+};
+
 class Prefetcher {
 	private:
+	static const u_int32_t MASK = 0xFFFF8000;		// First 17 bits to get tag
+	// static const u_int32_t MASK_B = 0b11111111111111111000000000000000;
 	bool isReady;
 	u_int32_t nextReqAddr;
+	std::map<u_int32_t, rptEntry> rpt;
 
   public:
 	Prefetcher();
